@@ -1,0 +1,5 @@
+{
+  "name": "O365 & Defender Unified Dashboard",
+  "description": "A modern, responsive web dashboard that integrates with Microsoft 365 (O365) and Microsoft Defender for Endpoint (MDE) to display a unified view of users and their associated devices.",
+  "requestFramePermissions": []
+}
