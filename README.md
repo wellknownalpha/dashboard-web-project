@@ -291,6 +291,7 @@ You now have a fully integrated system that securely fetches real data from Micr
 * Never commit `.env` or secret values to version control
 * Consider using HTTPS in production
 * Regularly rotate client secrets in Azure
+* npx serve . command to start backend server and npm run dev for frontend server
 
 ---
 
