@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { User, Device } from '../types';
 import DeviceTable from './DeviceTable';
+import UserAvatar from './UserAvatar';
 import { ChevronDownIcon } from './icons';
 
 interface UserCardProps {
@@ -18,11 +19,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, devices }) => {
                 className="flex items-center p-4 cursor-pointer"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <img
-                    className="w-12 h-12 rounded-full mr-4"
-                    src={user.photoUrl}
-                    alt={user.displayName}
-                />
+                <UserAvatar user={user} className="mr-4" />
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
                     <div>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.displayName}</p>

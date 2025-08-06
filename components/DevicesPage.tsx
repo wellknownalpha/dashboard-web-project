@@ -152,12 +152,17 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
                             <div className="space-y-4">
                                 {filteredDevices.map((device) => (
                                     <div key={device.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                                        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-start">
                                             <div>
                                                 <p className="font-semibold text-gray-900 dark:text-white">
                                                     {device.deviceName || `Device-${device.id.substring(0, 8)}`}
                                                 </p>
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">{device.os}</p>
+                                                {device.matchedUser && (
+                                                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                                                        👤 {device.matchedUser.displayName}
+                                                    </p>
+                                                )}
                                             </div>
                                             <div className="text-center">
                                                 <span className={`px-2 py-1 text-xs rounded-full ${
@@ -176,6 +181,27 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
                                                     {new Date(device.lastSeen).toLocaleDateString()}
                                                 </p>
                                                 <p className="text-xs text-gray-500 dark:text-gray-400">Last Seen</p>
+                                            </div>
+                                            <div>
+                                                <div className="min-h-[20px]">
+                                                    {device.machineTags && device.machineTags.length > 0 ? (
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {device.machineTags.slice(0, 3).map((tag, index) => (
+                                                                <span key={index} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                            {device.machineTags.length > 3 && (
+                                                                <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 rounded">
+                                                                    +{device.machineTags.length - 3}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400 italic">No tags assigned</span>
+                                                    )}
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Tags</p>
+                                                </div>
                                             </div>
                                             <div className="text-center">
                                                 <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">

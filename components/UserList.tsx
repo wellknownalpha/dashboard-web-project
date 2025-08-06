@@ -37,6 +37,7 @@ const UserList: React.FC<UserListProps> = ({ users, devices, loading }) => {
     }
 
     const unassignedDevices = devices.filter(d => d.userId === 'unknown' || !d.userId);
+    const assignedDevices = devices.filter(d => d.userId !== 'unknown' && d.userId);
     
     return (
         <div className="space-y-4 p-4">
@@ -53,7 +54,7 @@ const UserList: React.FC<UserListProps> = ({ users, devices, loading }) => {
                     user={{
                         id: 'unassigned',
                         displayName: 'Unassigned Devices',
-                        mail: `${unassignedDevices.length} devices without user assignment`,
+                        mail: `${unassignedDevices.length} devices (${assignedDevices.length} assigned via tags)`,
                         jobTitle: 'System',
                         department: 'IT',
                         role: 'Viewer' as any,

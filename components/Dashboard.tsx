@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 import { getUsers, getAllDevices } from '../services/microsoftApi';
+import { mapDevicesToUsers } from '../services/deviceUserMapping';
 import { User, Device, RiskLevel, UserRole } from '../types';
 import { exportUsersToCsv } from '../utils/export';
 
@@ -44,8 +45,11 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
         try {
             console.log('🔄 Fetching data from Microsoft APIs...');
             const [userResponse, deviceResponse] = await Promise.all([getUsers(), getAllDevices()]);
+            const mappedDevices = mapDevicesToUsers(userResponse, deviceResponse);
+            
+            console.log('📊 Device mapping completed');
             setUsers(userResponse);
-            setDevices(deviceResponse);
+            setDevices(mappedDevices);
             setLastSynced(new Date());
             console.log('✅ Data fetched successfully');
         } catch (error: any) {
@@ -85,7 +89,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
     }, [users, devices, searchTerm, riskFilter]);
     
     const devicesAtRisk = useMemo(() => {
-        return devices.filter(d => d.riskLevel === RiskLevel.High || d.riskLevel === RiskLevel.Medium).length;
+        return devices.filter(d => d.riskLevel === 'High' || d.riskLevel === 'Medium').length;
     }, [devices]);
     
     const handleExport = () => {

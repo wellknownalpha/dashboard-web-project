@@ -70,7 +70,7 @@ app.get('/api/users', async (req, res) => {
         
         // Fetch profile photos for filtered users
         const users = await Promise.all(filteredUsers.map(async (u) => {
-            let photoUrl = `https://i.pravatar.cc/150?u=${u.mail}`; // fallback
+            let photoUrl = null;
             try {
                 const photoResponse = await axios.get(`https://graph.microsoft.com/v1.0/users/${u.id}/photo/$value`, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -79,7 +79,8 @@ app.get('/api/users', async (req, res) => {
                 const photoBase64 = Buffer.from(photoResponse.data).toString('base64');
                 photoUrl = `data:image/jpeg;base64,${photoBase64}`;
             } catch (photoError) {
-                // Keep fallback photo if real photo not available
+                // No photo available - will use initials
+                photoUrl = null;
             }
             
             return {
@@ -123,18 +124,32 @@ app.get('/api/devices', async (req, res) => {
             skip += top;
             console.log(`📄 Fetched ${response.data.value.length} devices (Total: ${allDevices.length})`);
             
+            // Debug: Log first device to see available fields
+            if (allDevices.length === response.data.value.length && response.data.value.length > 0) {
+                console.log('🔍 Sample device fields:', Object.keys(response.data.value[0]));
+                console.log('🏷️ Sample device tags:', response.data.value[0].machineTags);
+            }
+            
             if (response.data.value.length < top) break;
         }
 
-        const devices = allDevices.map(d => ({
-            id: d.id,
-            userId: d.lastLoggedOnUser?.aadUserId || d.lastLoggedOnUser?.userPrincipalName || 'unknown',
-            deviceName: d.computerDnsName || d.deviceName,
-            os: d.osPlatform,
-            healthStatus: d.healthStatus,
-            riskLevel: d.riskScore === 'High' ? 'High' : d.riskScore === 'Medium' ? 'Medium' : 'Low',
-            lastSeen: d.lastSeen
-        }));
+        const devices = allDevices.map((d, index) => {
+            // Debug first few devices
+            if (index < 3) {
+                console.log(`🔍 Device ${index + 1} raw tags:`, d.machineTags);
+            }
+            
+            return {
+                id: d.id,
+                userId: d.lastLoggedOnUser?.aadUserId || d.lastLoggedOnUser?.userPrincipalName || 'unknown',
+                deviceName: d.computerDnsName || d.deviceName,
+                os: d.osPlatform,
+                healthStatus: d.healthStatus,
+                riskLevel: d.riskScore === 'High' ? 'High' : d.riskScore === 'Medium' ? 'Medium' : 'Low',
+                lastSeen: d.lastSeen,
+                machineTags: d.machineTags || []
+            };
+        });
 
         console.log(`✅ Successfully fetched ${devices.length} total devices`);
         res.json(devices);

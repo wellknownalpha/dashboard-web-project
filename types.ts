@@ -36,6 +36,7 @@ export interface Device {
     healthStatus: HealthStatus;
     riskLevel: RiskLevel;
     lastSeen: string;
+    machineTags?: string[];
 }
 
 export type Theme = 'light' | 'dark';

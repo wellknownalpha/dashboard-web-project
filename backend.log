@@ -1,0 +1,182 @@
+
+> secureops-backend@1.0.0 start
+> node server-improved.js
+
+🚀 Starting SecureOps Backend Server...
+📋 Configuration Check:
+   Tenant ID: ✅ Set
+   Client ID: ✅ Set
+   Client Secret: ✅ Set
+🌐 Backend server running at http://localhost:3001
+📋 Health check: http://localhost:3001/api/health
+
+⚠️  If you see authentication errors:
+   1. Check your Azure app registration client secret
+   2. Ensure API permissions are granted
+   3. Run: node test-api.js to verify credentials
+📊 Fetching ALL users with licenses from Microsoft Graph...
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Graph API token acquired successfully
+✅ Defender API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+✅ Successfully fetched 396 total users, 82 with target licenses
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+✅ Successfully fetched 396 total users, 82 with target licenses
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+📄 Fetched 396 users (Total: 396)
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+✅ Successfully fetched 396 total users, 82 with target licenses
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+✅ Successfully fetched 396 total users, 82 with target licenses
+🛡️ Fetching ALL devices from Microsoft Defender...
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+✅ Defender API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+✅ Successfully fetched 396 total users, 82 with target licenses
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+✅ Successfully fetched 396 total users, 82 with target licenses
+🛡️ Fetching ALL devices from Microsoft Defender...
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Defender API token acquired successfully
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+✅ Successfully fetched 396 total users, 82 with target licenses
+📊 Fetching ALL users with licenses from Microsoft Graph...
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+✅ Successfully fetched 396 total users, 82 with target licenses
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+🛡️ Fetching ALL devices from Microsoft Defender...
+✅ Defender API token acquired successfully
+❌ Failed to fetch devices: {
+  error: {
+    code: '',
+    message: "The query specified in the URI is not valid. Could not find a property named 'loggedOnUsers' on type 'microsoft.windowsDefenderATP.api.Machine'.",
+    details: []
+  }
+}
+📄 Fetched 396 users (Total: 396)
+✅ Successfully fetched 396 total users, 82 with target licenses
+📊 Fetching ALL users with licenses from Microsoft Graph...
+✅ Graph API token acquired successfully
+📄 Fetched 396 users (Total: 396)
+✅ Successfully fetched 396 total users, 82 with target licenses
