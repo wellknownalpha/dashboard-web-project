@@ -36,6 +36,8 @@ const UserList: React.FC<UserListProps> = ({ users, devices, loading }) => {
         )
     }
 
+    const unassignedDevices = devices.filter(d => d.userId === 'unknown' || !d.userId);
+    
     return (
         <div className="space-y-4 p-4">
             {users.map((user) => (
@@ -45,6 +47,21 @@ const UserList: React.FC<UserListProps> = ({ users, devices, loading }) => {
                     devices={devices.filter(d => d.userId === user.id)}
                 />
             ))}
+            {unassignedDevices.length > 0 && (
+                <UserCard
+                    key="unassigned"
+                    user={{
+                        id: 'unassigned',
+                        displayName: 'Unassigned Devices',
+                        mail: `${unassignedDevices.length} devices without user assignment`,
+                        jobTitle: 'System',
+                        department: 'IT',
+                        role: 'Viewer' as any,
+                        photoUrl: 'https://i.pravatar.cc/150?u=system'
+                    }}
+                    devices={unassignedDevices}
+                />
+            )}
         </div>
     );
 };

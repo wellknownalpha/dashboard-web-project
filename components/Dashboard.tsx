@@ -15,6 +15,7 @@ import { SearchIcon, RefreshIcon, LogoutIcon, DocumentArrowDownIcon, UsersIcon, 
 interface DashboardProps {
   currentUser: User;
   onLogout: () => void;
+  onNavigate?: (page: 'dashboard' | 'devices') => void;
 }
 
 const Panel: React.FC<{ title: string, children: React.ReactNode, className?: string }> = ({ title, children, className = "" }) => (
@@ -26,10 +27,11 @@ const Panel: React.FC<{ title: string, children: React.ReactNode, className?: st
   </div>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout }) => {
+const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate }) => {
     const [users, setUsers] = useState<User[]>([]);
     const [devices, setDevices] = useState<Device[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [riskFilter, setRiskFilter] = useState<RiskLevel | 'All'>('All');
     const [lastSynced, setLastSynced] = useState<Date | null>(null);
@@ -38,13 +40,17 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout }) => {
 
     const fetchData = useCallback(async () => {
         setLoading(true);
+        setError(null);
         try {
+            console.log('🔄 Fetching data from Microsoft APIs...');
             const [userResponse, deviceResponse] = await Promise.all([getUsers(), getAllDevices()]);
             setUsers(userResponse);
             setDevices(deviceResponse);
             setLastSynced(new Date());
-        } catch (error) {
-            console.error("Failed to fetch data", error);
+            console.log('✅ Data fetched successfully');
+        } catch (error: any) {
+            console.error("❌ Failed to fetch data", error);
+            setError(error.message || 'Failed to fetch data from Microsoft APIs');
         } finally {
             setLoading(false);
         }
@@ -94,6 +100,14 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout }) => {
                   <p className="text-xs text-gray-500 dark:text-gray-400">Welcome, {currentUser.displayName} ({currentUser.role})</p>
                 </div>
                 <div className="flex items-center space-x-4">
+                    {onNavigate && (
+                        <button
+                            onClick={() => onNavigate('devices')}
+                            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                        >
+                            View Devices
+                        </button>
+                    )}
                     <ThemeToggle />
                     <button
                       onClick={onLogout}
@@ -153,9 +167,27 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout }) => {
                     </div>
                 </div>
 
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Microsoft API Connection Error</h3>
+                                <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
+                                <p className="text-xs text-red-600 dark:text-red-400 mt-2">Please check your Azure app registration credentials and API permissions.</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <KpiCard title="Total Users" value={users.length} icon={<UsersIcon className="h-6 w-6"/>} />
+                        <KpiCard title="Total Devices" value={devices.length} icon={<ShieldCheckIcon className="h-6 w-6"/>} />
                         <KpiCard title="Devices at Risk" value={devicesAtRisk} icon={<ShieldCheckIcon className="h-6 w-6"/>} />
                         <KpiCard title="Last Synced" value={lastSynced ? lastSynced.toLocaleTimeString() : 'N/A'} icon={<ClockIcon className="h-6 w-6"/>} />
                     </div>

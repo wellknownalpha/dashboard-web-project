@@ -32,8 +32,16 @@ const UserCard: React.FC<UserCardProps> = ({ user, devices }) => {
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{user.jobTitle}</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{user.department}</p>
                     </div>
-                     <div className="hidden md:block">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{devices.length} Devices</p>
+                    <div className="hidden md:block">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{devices.length} Device{devices.length !== 1 ? 's' : ''}</p>
+                        {devices.length > 0 && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Risk: {devices.filter(d => d.riskLevel === 'High').length} High, {devices.filter(d => d.riskLevel === 'Medium').length} Medium
+                            </p>
+                        )}
+                    </div>
+                    <div className="md:hidden">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{devices.length} Device{devices.length !== 1 ? 's' : ''}</p>
                     </div>
                 </div>
                 <ChevronDownIcon

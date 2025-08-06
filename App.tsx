@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Theme, ThemeContextType, User, UserRole } from './types';
 import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
+import DevicesPage from './components/DevicesPage';
 import { login } from './services/microsoftApi';
 
 export const ThemeContext = React.createContext<ThemeContextType | null>(null);
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'devices'>('dashboard');
   const [theme, setTheme] = useState<Theme>('dark'); // Default to dark theme
 
   useEffect(() => {
@@ -48,10 +50,21 @@ const App: React.FC = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  const renderCurrentPage = () => {
+    if (!currentUser) return <LoginScreen onLogin={handleLogin} />;
+    
+    switch (currentPage) {
+      case 'devices':
+        return <DevicesPage onNavigate={setCurrentPage} />;
+      default:
+        return <Dashboard currentUser={currentUser} onLogout={handleLogout} onNavigate={setCurrentPage} />;
+    }
+  };
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className="min-h-screen font-sans">
-        {currentUser ? <Dashboard currentUser={currentUser} onLogout={handleLogout} /> : <LoginScreen onLogin={handleLogin} />}
+        {renderCurrentPage()}
       </div>
     </ThemeContext.Provider>
   );

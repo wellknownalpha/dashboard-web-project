@@ -6,15 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:backend": "cd backend && npm start",
+    "start:full": "concurrently \"npm run start:backend\" \"npm run dev\""
   },
   "dependencies": {
-    "react-dom": "^18.2.0",
-    "react": "^18.2.0",
     "@heroicons/react": "^2.2.0",
-    "recharts": "2.12.7",
     "clsx": "2.1.1",
-    "react-is": "18.2.0"
+    "concurrently": "^8.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "18.2.0",
+    "recharts": "2.12.7"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Microsoft API Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testAPIs() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test users
+                console.log('Testing users API...');
+                const usersResponse = await fetch('http://localhost:3001/api/users');
+                const users = await usersResponse.json();
+                console.log('Users:', users);
+                
+                // Test devices
+                console.log('Testing devices API...');
+                const devicesResponse = await fetch('http://localhost:3001/api/devices');
+                const devices = await devicesResponse.json();
+                console.log('Devices:', devices);
+                
+                results.innerHTML = `
+                    <h2>✅ API Test Results</h2>
+                    <p><strong>Users:</strong> ${users.length} found</p>
+                    <p><strong>Devices:</strong> ${devices.length} found</p>
+                    <h3>Sample User:</h3>
+                    <pre>${JSON.stringify(users[0], null, 2)}</pre>
+                    <h3>Sample Device:</h3>
+                    <pre>${JSON.stringify(devices[0], null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                results.innerHTML = `<h2>❌ Error: ${error.message}</h2>`;
+            }
+        }
+        
+        testAPIs();
+    </script>
+</body>
+</html>

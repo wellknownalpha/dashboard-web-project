@@ -6,9 +6,11 @@ export enum RiskLevel {
 }
 
 export enum HealthStatus {
-    Healthy = 'Healthy',
+    Active = 'Active',
     Inactive = 'Inactive',
-    AtRisk = 'At risk'
+    ImpairedCommunication = 'ImpairedCommunication',
+    NoSensorData = 'NoSensorData',
+    NoSensorDataImpairedCommunication = 'NoSensorDataImpairedCommunication'
 }
 
 export enum UserRole {

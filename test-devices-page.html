@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Devices API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .device { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Device API Test</h1>
+    <button onclick="testDevicesAPI()">Test Devices API</button>
+    <div id="results"></div>
+    
+    <script>
+        async function testDevicesAPI() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/devices');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const devices = await response.json();
+                
+                results.innerHTML = `
+                    <h2 class="success">✅ Success!</h2>
+                    <p><strong>Total devices:</strong> ${devices.length}</p>
+                    <h3>First 5 devices:</h3>
+                    ${devices.slice(0, 5).map(device => `
+                        <div class="device">
+                            <strong>${device.deviceName || 'Unknown'}</strong><br>
+                            OS: ${device.os}<br>
+                            Status: ${device.healthStatus}<br>
+                            Risk: ${device.riskLevel}<br>
+                            Last Seen: ${new Date(device.lastSeen).toLocaleDateString()}
+                        </div>
+                    `).join('')}
+                `;
+                
+            } catch (error) {
+                results.innerHTML = `
+                    <h2 class="error">❌ Error</h2>
+                    <p>${error.message}</p>
+                    <p>Make sure your backend server is running on port 3001</p>
+                `;
+            }
+        }
+        
+        // Auto-test on page load
+        testDevicesAPI();
+    </script>
+</body>
+</html>
