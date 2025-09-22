@@ -102,6 +102,8 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
+
+
 app.get('/api/devices', async (req, res) => {
     console.log('🛡️ Fetching ALL devices from Microsoft Defender...');
     try {

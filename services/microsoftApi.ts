@@ -13,43 +13,69 @@ export const login = async (role: UserRole): Promise<User | undefined> => {
 };
 
 export const getUsers = async (): Promise<User[]> => {
+    console.log('🔄 Fetching users from backend API...');
+    
     try {
-        console.log('🔄 Fetching users from:', 'http://localhost:3001/api/users');
-        const response = await fetch('http://localhost:3001/api/users');
-        console.log('📡 User API response status:', response.status);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+            console.log('⏰ Request timed out after 30 seconds');
+        }, 30000); // 30 second timeout
+        
+        const response = await fetch('http://localhost:3001/api/users', {
+            signal: controller.signal,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-            console.error('❌ User API Error:', errorData);
-            throw new Error(errorData.error || 'Failed to fetch users from Microsoft Graph');
+            const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+            throw new Error(errorData.error || `Backend returned ${response.status}`);
         }
         
         const data = await response.json();
         console.log('✅ Users fetched successfully:', data.length, 'users');
         return data;
-    } catch (error) {
-        console.error('❌ Failed to fetch users:', error);
-        return []; // Keep returning empty array for users to prevent app crash
+    } catch (error: any) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out - Backend server may not be running on port 3001');
+        }
+        throw new Error(`Connection failed: ${error.message}`);
     }
 };
 
 export const getAllDevices = async (): Promise<Device[]> => {
+    console.log('🔄 Fetching devices from backend API...');
+    
     try {
-        console.log('🔄 Fetching devices from:', 'http://localhost:3001/api/devices');
-        const response = await fetch('http://localhost:3001/api/devices');
-        console.log('📡 Device API response status:', response.status);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+            console.log('⏰ Request timed out after 30 seconds');
+        }, 30000); // 30 second timeout
+        
+        const response = await fetch('http://localhost:3001/api/devices', {
+            signal: controller.signal,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-            console.error('❌ Device API Error:', errorData);
-            throw new Error(errorData.error || 'Failed to fetch devices from Microsoft Defender');
+            const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+            throw new Error(errorData.error || `Backend returned ${response.status}`);
         }
         
         const data = await response.json();
         console.log('✅ Devices fetched successfully:', data.length, 'devices');
         return data;
-    } catch (error) {
-        console.error('❌ Failed to fetch devices:', error);
-        throw error; // Throw the error so Dashboard can show it
+    } catch (error: any) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out - Backend server may not be running on port 3001');
+        }
+        throw new Error(`Connection failed: ${error.message}`);
     }
 };

@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "globaladmin",
+      "displayName": "Global Administrator",
+      "email": "admin@company.com",
+      "role": "GlobalAdmin",
+      "passwordHash": "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",   // is a bcrypt hash that represents the password "secret".
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "mfaEnabled": false,
+      "mfaSecret": null
+    }
+  ]
+}

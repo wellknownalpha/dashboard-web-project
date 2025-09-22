@@ -14,6 +14,7 @@ export enum HealthStatus {
 }
 
 export enum UserRole {
+    GlobalAdmin = 'GlobalAdmin',
     Admin = 'Admin',
     Viewer = 'Viewer',
 }
@@ -26,6 +27,18 @@ export interface User {
     department: string;
     role: UserRole;
     photoUrl?: string;
+}
+
+export interface AuthUser {
+    id: string;
+    username: string;
+    displayName: string;
+    email: string;
+    role: UserRole;
+    createdAt: string;
+    lastLogin?: string;
+    mfaEnabled: boolean;
+    mfaSecret?: string;
 }
 
 export interface Device {

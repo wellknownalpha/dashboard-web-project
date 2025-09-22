@@ -94,3 +94,86 @@ npm run start:full
 # Build for production
 npm run build
 ```
+
+## 🛠️ Development Guide
+
+### Development Setup
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd Dashboard
+
+# Install all dependencies (frontend + backend)
+npm run install:all
+
+# Start development environment
+npm run start:full
+```
+
+### Development Scripts
+
+```bash
+# Frontend only (port 5173)
+npm run dev
+
+# Backend only (port 3001)
+npm run start:backend
+
+# Both frontend and backend
+npm run start:full
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Code Structure
+
+```
+Dashboard/
+├── components/           # React components
+│   ├── Dashboard.tsx    # Main dashboard with KPIs
+│   ├── UserManagement.tsx # User administration
+│   ├── CompliancePage.tsx # Compliance monitoring
+│   └── DeviceActivityCard.tsx # Activity tracking
+├── services/            # Business logic services
+│   ├── authService.ts   # Authentication & user management
+│   ├── microsoftApi.ts  # API integration
+│   ├── deviceUserMapping.ts # Device-user association
+│   └── notificationService.ts # Email notifications
+├── utils/               # Utility functions
+│   ├── export.ts        # CSV export functionality
+│   ├── complianceExport.ts # Compliance reporting
+│   └── pdfExport.ts     # PDF generation
+├── types.ts             # TypeScript interfaces
+└── backend/             # Express.js backend
+    ├── server-improved.js # Main server file
+    └── .env             # Environment configuration
+```
+
+## 📋 Feature Roadmap
+
+### Planned Features
+- [ ] **Real Email Integration**: Replace console logging with actual email service
+- [ ] **Advanced Analytics**: Trend analysis and predictive insights
+- [ ] **Custom Dashboards**: User-configurable dashboard layouts
+- [ ] **API Rate Limiting**: Implement proper rate limiting and caching
+- [ ] **Audit Logging**: Comprehensive audit trail for all actions
+
+### Recent Updates
+- ✅ **Device Activity Compliance**: 14-day activity monitoring
+- ✅ **PDF Export**: Comprehensive dashboard reports
+- ✅ **Email Notifications**: Automated alerts for inactive devices
+- ✅ **MFA Integration**: Google Authenticator compatibility
+- ✅ **Role-Based Access**: GlobalAdmin, Admin, Viewer roles
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+**Note**: This codebase includes comprehensive comments throughout all components, services, and utilities for better understanding and knowledge sharing. Each file contains detailed explanations of business logic, data flow, and implementation decisions.
