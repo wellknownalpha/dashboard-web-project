@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Device, RiskLevel } from '../types';
 import { getAllDevices } from '../services/microsoftApi';
 import { SearchIcon, RefreshIcon } from './icons';
 import ThemeToggle from './ThemeToggle';
@@ -36,7 +37,9 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
         setLoading(true);
         setError(null);
         try {
-            const deviceData = await getAllDevices();
+            const response = await fetch('http://localhost:3001/api/devices');
+            if (!response.ok) throw new Error('Failed to fetch devices');
+            const deviceData = await response.json();
             console.log('✅ Fetched devices:', deviceData.length);
             setDevices(deviceData);
         } catch (error: any) {
@@ -54,7 +57,7 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
     const filteredDevices = useMemo(() => {
         return devices.filter(device => {
             const deviceName = device.deviceName || device.id || 'Unknown Device';
-            const matchesSearch = deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            const matchesSearch = deviceName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                                  (device.os || '').toLowerCase().includes(searchTerm.toLowerCase());
             const matchesOS = osFilter === 'All' || device.os === osFilter;
             const matchesRisk = riskFilter === 'All' || device.riskLevel === riskFilter;
@@ -163,7 +166,7 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
                                             </div>
                                             <div className="text-center">
                                                 <span className={`px-2 py-1 text-xs rounded-full ${
-                                                    device.healthStatus === 'Active'
+                                                    device.healthStatus === 'Active' 
                                                         ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                                                         : 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300'
                                                 }`}>
@@ -218,4 +221,3 @@ const DevicesPage: React.FC<DevicesPageProps> = ({ onNavigate }) => {
 };
 
 export default DevicesPage;
-

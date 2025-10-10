@@ -329,7 +329,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                     {/* Key Performance Indicators (KPIs) Row */}
                     <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <KpiCard title="Total Users" value={users.length} icon={<UsersIcon className="h-6 w-6"/>} />
-                        <KpiCard 
+			<KpiCard 
     title="Total Devices" 
     value={devices.filter(device => device.machineTags && device.machineTags.length > 0).length} 
     icon={<ShieldCheckIcon className="h-6 w-6"/>} 
@@ -351,9 +351,6 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                           nonCompliantUsers={complianceStats.nonCompliantUsers}
                           complianceRate={complianceStats.complianceRate}
                         />
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-    📌 Users are considered non-compliant when their devices have been inactive for more than 14 days.
-  </p>
                       </Panel>
                     </div>
                     

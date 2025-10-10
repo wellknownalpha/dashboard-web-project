@@ -22,8 +22,7 @@ export const getUsers = async (): Promise<User[]> => {
             console.log('⏰ Request timed out after 30 seconds');
         }, 30000); // 30 second timeout
         
-        const response = await fetch('/api/users', {
-
+        const response = await fetch('http://localhost:3001/api/users', {
             signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json'
@@ -57,8 +56,7 @@ export const getAllDevices = async (): Promise<Device[]> => {
             console.log('⏰ Request timed out after 30 seconds');
         }, 30000); // 30 second timeout
         
-        const response = await fetch('/api/devices', {
-
+        const response = await fetch('http://localhost:3001/api/devices', {
             signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json'

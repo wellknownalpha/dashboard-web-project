@@ -91,9 +91,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                     </div>
 
                     <div className="text-xs text-gray-500 dark:text-gray-400 text-center space-y-2">
-                        <p>Default credentials:</p>
-                        <p>Username: <code>globaladmin</code> | Password: <code>MyNewPassword123!</code></p>
-                        <button
+		    {/* <p>Default credentials:</p>
+                        <p>Username: <code>globaladmin</code> | Password: <code>Admin@123</code></p>
+                     */}   <button
                             type="button"
                             onClick={() => {
                                 // @ts-ignore

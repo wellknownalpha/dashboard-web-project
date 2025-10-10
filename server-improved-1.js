@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = 3001;
 
 app.use(cors());
 
@@ -36,38 +35,40 @@ const acquireAccessToken = async (scope) => {
     }
 };
 
-// ===== API ROUTES =====
 app.get('/api/users', async (req, res) => {
     console.log('📊 Fetching ALL users with licenses from Microsoft Graph...');
     try {
         const token = await acquireAccessToken('https://graph.microsoft.com/.default');
         console.log('✅ Graph API token acquired successfully');
-
+        
         let allUsers = [];
         let nextLink = 'https://graph.microsoft.com/v1.0/users?$select=id,displayName,mail,jobTitle,department,assignedLicenses&$top=999';
-
+        
+        // Fetch all users with pagination
         while (nextLink) {
             const response = await axios.get(nextLink, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
+            
             allUsers = allUsers.concat(response.data.value);
             nextLink = response.data['@odata.nextLink'];
             console.log(`📄 Fetched ${response.data.value.length} users (Total: ${allUsers.length})`);
         }
-
+        
+        // Filter users with Defender P2 or M365 Business Standard licenses
         const targetSkuIds = [
-            'c7df2760-2c81-4ef7-b578-5b5392b571df',
-            'f245ecc8-75af-4f8e-b61f-27d8114de5f3',
-            'cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46',
-            '05e9a617-0261-4cee-bb44-138d3ef5d965'
+            'c7df2760-2c81-4ef7-b578-5b5392b571df', // Microsoft Defender for Endpoint P2
+            'f245ecc8-75af-4f8e-b61f-27d8114de5f3', // Microsoft 365 Business Standard
+            'cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46', // Microsoft 365 Business Premium
+            '05e9a617-0261-4cee-bb44-138d3ef5d965'  // Microsoft 365 E3
         ];
-
+        
         const filteredUsers = allUsers.filter(user => {
             if (!user.assignedLicenses || user.assignedLicenses.length === 0) return false;
             return user.assignedLicenses.some(license => targetSkuIds.includes(license.skuId));
         });
-
+        
+        // Fetch profile photos for filtered users
         const users = await Promise.all(filteredUsers.map(async (u) => {
             let photoUrl = null;
             try {
@@ -77,22 +78,23 @@ app.get('/api/users', async (req, res) => {
                 });
                 const photoBase64 = Buffer.from(photoResponse.data).toString('base64');
                 photoUrl = `data:image/jpeg;base64,${photoBase64}`;
-            } catch (_) {
+            } catch (photoError) {
+                // No photo available - will use initials
                 photoUrl = null;
             }
-
+            
             return {
                 ...u,
                 role: 'Viewer',
                 photoUrl
             };
         }));
-
+        
         console.log(`✅ Successfully fetched ${allUsers.length} total users, ${users.length} with target licenses`);
         res.json(users);
     } catch (error) {
         console.error('❌ Failed to fetch users:', error.response?.data || error.message);
-        res.status(500).json({
+        res.status(500).json({ 
             error: 'Failed to fetch users from Microsoft Graph',
             details: error.response?.data || error.message,
             suggestion: 'Check your Azure app registration credentials and permissions'
@@ -100,44 +102,62 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
+
+
 app.get('/api/devices', async (req, res) => {
     console.log('🛡️ Fetching ALL devices from Microsoft Defender...');
     try {
         const token = await acquireAccessToken('https://api.securitycenter.microsoft.com/.default');
         console.log('✅ Defender API token acquired successfully');
-
+        
         let allDevices = [];
         let skip = 0;
         const top = 1000;
-
+        
+        // Fetch all devices with pagination
         while (true) {
             const response = await axios.get(`https://api.securitycenter.microsoft.com/api/machines?$top=${top}&$skip=${skip}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
+            
             if (response.data.value.length === 0) break;
-
+            
             allDevices = allDevices.concat(response.data.value);
             skip += top;
             console.log(`📄 Fetched ${response.data.value.length} devices (Total: ${allDevices.length})`);
+            
+            // Debug: Log first device to see available fields
+            if (allDevices.length === response.data.value.length && response.data.value.length > 0) {
+                console.log('🔍 Sample device fields:', Object.keys(response.data.value[0]));
+                console.log('🏷️ Sample device tags:', response.data.value[0].machineTags);
+            }
+            
+            if (response.data.value.length < top) break;
         }
 
-        const devices = allDevices.map((d) => ({
-            id: d.id,
-            userId: d.lastLoggedOnUser?.aadUserId || d.lastLoggedOnUser?.userPrincipalName || 'unknown',
-            deviceName: d.computerDnsName || d.deviceName,
-            os: d.osPlatform,
-            healthStatus: d.healthStatus,
-            riskLevel: d.riskScore === 'High' ? 'High' : d.riskScore === 'Medium' ? 'Medium' : 'Low',
-            lastSeen: d.lastSeen,
-            machineTags: d.machineTags || []
-        }));
+        const devices = allDevices.map((d, index) => {
+            // Debug first few devices
+            if (index < 3) {
+                console.log(`🔍 Device ${index + 1} raw tags:`, d.machineTags);
+            }
+            
+            return {
+                id: d.id,
+                userId: d.lastLoggedOnUser?.aadUserId || d.lastLoggedOnUser?.userPrincipalName || 'unknown',
+                deviceName: d.computerDnsName || d.deviceName,
+                os: d.osPlatform,
+                healthStatus: d.healthStatus,
+                riskLevel: d.riskScore === 'High' ? 'High' : d.riskScore === 'Medium' ? 'Medium' : 'Low',
+                lastSeen: d.lastSeen,
+                machineTags: d.machineTags || []
+            };
+        });
 
         console.log(`✅ Successfully fetched ${devices.length} total devices`);
         res.json(devices);
     } catch (error) {
         console.error('❌ Failed to fetch devices:', error.response?.data || error.message);
-        res.status(500).json({
+        res.status(500).json({ 
             error: 'Failed to fetch devices from Microsoft Defender',
             details: error.response?.data || error.message,
             suggestion: 'Check your Azure app registration credentials and Defender API permissions'
@@ -145,8 +165,9 @@ app.get('/api/devices', async (req, res) => {
     }
 });
 
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({
+    res.json({ 
         status: 'running',
         timestamp: new Date().toISOString(),
         config: {
@@ -156,16 +177,6 @@ app.get('/api/health', (req, res) => {
         }
     });
 });
-
-// ===== Serve frontend build =====
-app.use(express.static(path.join(__dirname, '../dist')));
-
-app.get('*', (req, res) => {
-    if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'API route not found' });
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
-});
-
-// ===== Start server =====
 app.listen(port, "0.0.0.0", () => {
     console.log(`🌐 Backend server running at http://0.0.0.0:${port}`);
     console.log(`📋 Health check: http://localhost:${port}/api/health`);
@@ -175,4 +186,3 @@ app.listen(port, "0.0.0.0", () => {
     console.log('   2. Ensure API permissions are granted');
     console.log('   3. Run: node test-api.js to verify credentials');
 });
-

@@ -114,6 +114,7 @@ const DeviceActivityCard: React.FC<DeviceActivityCardProps> = ({ users, devices 
                     inactiveUsers={stats.inactiveUsers}
                     activityRate={stats.activityRate}
                 />
+		<h3 className="text-lg font-semibold p-4 border-b border-gray-200 dark:border-gray-700">When users are inactive or haven't been seen for more than 14 days are considered non-compliance</h3>
             </div>
         </div>
     );
