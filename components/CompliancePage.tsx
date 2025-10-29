@@ -10,7 +10,7 @@ import { User, Device, RiskLevel, UserRole } from '../types';
 
 // Utility for compliance report generation
 import { exportComplianceReport } from '../utils/complianceExport';
-import { EmailAlertService } from '../services/emailAlertService';
+import { EmailAlertServices } from '../services/emailAlertService';
 import { IndividualEmailService } from '../services/individualEmailService';
 
 /**
@@ -197,7 +197,7 @@ const CompliancePage: React.FC = () => {
                             disabled={sendingAlerts}
                             className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-orange-400 transition-colors flex items-center gap-2 shadow-md"
                         >
-                            <span className="text-lg">{sendingAlerts ? '⏳' : '📧'}</span>
+                            <span className="text-lg">{sendingAlerts ? '' : ''}</span>
                             {sendingAlerts ? 'Sending Alerts...' : 'Send Email Alerts'}
                         </button>
                         
@@ -206,7 +206,7 @@ const CompliancePage: React.FC = () => {
                             onClick={() => exportComplianceReport(users, devices)}
                             className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 shadow-md"
                         >
-                            <span className="text-lg">📊</span>
+                            <span className="text-lg"></span>
                             Export Report
                         </button>
                     </div>
@@ -248,7 +248,7 @@ const CompliancePage: React.FC = () => {
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Users</p>
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{complianceStats.totalUsers}</p>
                             </div>
-                            <div className="text-3xl">👥</div>
+                            <div className="text-3xl"></div>
                         </div>
                     </div>
 
@@ -259,7 +259,7 @@ const CompliancePage: React.FC = () => {
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Compliant Users</p>
                                 <p className="text-3xl font-bold text-green-600 dark:text-green-400">{complianceStats.compliantUsers}</p>
                             </div>
-                            <div className="text-3xl">✅</div>
+                            <div className="text-3xl"></div>
                         </div>
                     </div>
 
@@ -270,7 +270,7 @@ const CompliancePage: React.FC = () => {
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Non-Compliant</p>
                                 <p className="text-3xl font-bold text-red-600 dark:text-red-400">{complianceStats.nonCompliantUsers}</p>
                             </div>
-                            <div className="text-3xl">❌</div>
+                            <div className="text-3xl"></div>
                         </div>
                     </div>
 
@@ -283,7 +283,7 @@ const CompliancePage: React.FC = () => {
                                     {complianceStats.complianceRate.toFixed(1)}%
                                 </p>
                             </div>
-                            <div className="text-3xl">📊</div>
+                            <div className="text-3xl"></div>
                         </div>
                     </div>
                 </div>
@@ -293,9 +293,9 @@ const CompliancePage: React.FC = () => {
                     <div className="flex items-center gap-4">
                         {/* Status Indicator Icon */}
                         <div className="text-4xl">
-                            {complianceStats.complianceRate >= 90 ? '🟢' :     // Green circle for excellent
-                             complianceStats.complianceRate >= 70 ? '🟡' :     // Yellow circle for good
-                             '🔴'                                               /*Red circle for poor */
+                            {complianceStats.complianceRate >= 90 ? '' :     // Green circle for excellent
+                             complianceStats.complianceRate >= 70 ? '' :     // Yellow circle for good
+                             ''                                               /*Red circle for poor */
                              }                                              
                         </div>
                         <div>
@@ -322,7 +322,7 @@ const CompliancePage: React.FC = () => {
                         {/* Section Header */}
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-3">
-                                <span className="text-2xl">⚠️</span>
+                                <span className="text-2xl"></span>
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                     Non-Compliant Users ({complianceStats.unprotectedUsers.length})
                                 </h3>
@@ -390,7 +390,7 @@ const CompliancePage: React.FC = () => {
                                                 className="px-3 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:bg-orange-400 transition-colors flex items-center gap-1"
                                                 title={`Send email alert to ${user.displayName}`}
                                             >
-                                                <span>{isLoading ? '⏳' : '📧'}</span>
+                                                <span>{isLoading ? '⏳' : ''}</span>
                                                 {isLoading ? 'Sending...' : 'Send Alert'}
                                             </button>
                                         </div>
@@ -405,7 +405,7 @@ const CompliancePage: React.FC = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
                     <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <span className="text-2xl">📱</span>
+                            <span className="text-2xl"></span>
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Device Activity Compliance
                             </h3>
@@ -554,7 +554,7 @@ const CompliancePage: React.FC = () => {
                                                                     className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 disabled:bg-orange-400 transition-colors flex items-center gap-1"
                                                                     title={`Send email alert to ${user.displayName}`}
                                                                 >
-                                                                    <span>{isLoading ? '⏳' : '📧'}</span>
+                                                                    <span>{isLoading ? '⏳' : ''}</span>
                                                                     {isLoading ? 'Sending...' : 'Alert'}
                                                                 </button>
                                                             </div>
@@ -587,7 +587,7 @@ const CompliancePage: React.FC = () => {
                     {/* Section Header */}
                     <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <span className="text-2xl">✅</span>
+                            <span className="text-2xl"></span>
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Compliant Users ({complianceStats.compliantUsers})
                             </h3>

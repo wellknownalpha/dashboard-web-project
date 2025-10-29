@@ -21,13 +21,13 @@ import ComplianceChart from './ComplianceChart';      // Chart showing complianc
 import DeviceActivityCard from './DeviceActivityCard'; // Card showing device activity compliance
 
 // Icon components for UI elements
-import { SearchIcon, RefreshIcon, LogoutIcon, DocumentArrowDownIcon, UsersIcon, ShieldCheckIcon, ClockIcon } from './icons';
+import { SearchIcon, RefreshIcon, LogoutIcon, DocumentArrowDownIcon, UsersIcon, ShieldCheckIcon, ClockIcon, MailIcon,DeviceIcon,RiskDevice } from './icons';
 
 // Utilities for compliance reporting and PDF generation
 import { exportComplianceReport, getComplianceStats } from '../utils/complianceExport';
 import { checkInactiveDevicesAndNotify } from '../services/notificationService';
 import { exportDashboardToPDF } from '../utils/pdfExport';
-import { EmailAlertService } from '../services/emailAlertService';
+import { EmailAlertServices } from '../services/emailAlertService';
 
 
 /**
@@ -89,7 +89,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
         setLoading(true);
         setError(null);
         try {
-            console.log('🔄 Fetching data from Microsoft APIs...');
+            console.log(' Fetching data from Microsoft APIs...');
             
             // Parallel API calls to Microsoft Graph (users) and Defender (devices)
             const [userResponse, deviceResponse] = await Promise.all([getUsers(), getAllDevices()]);
@@ -98,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
             const mappedDevices = mapDevicesToUsers(userResponse, deviceResponse);
             
             // Log successful data retrieval with statistics
-            console.log('📊 Device mapping completed:', {
+            console.log(' Device mapping completed:', {
                 users: userResponse.length,
                 devices: mappedDevices.length,
                 riskLevels: mappedDevices.reduce((acc, d) => {
@@ -111,9 +111,9 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
             setUsers(userResponse);
             setDevices(mappedDevices);
             setLastSynced(new Date());
-            console.log('✅ Data fetched successfully');
+            console.log(' Data fetched successfully');
         } catch (error: any) {
-            console.error("❌ Failed to fetch data", error);
+            console.error(" Failed to fetch data", error);
             setError(error.message || 'Failed to fetch data from Microsoft APIs');
         } finally {
             setLoading(false);
@@ -177,7 +177,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
      */
     const devicesAtRisk = useMemo(() => {
         const highRiskDevices = devices.filter(d => d.riskLevel === 'High');
-        console.log('📊 High risk devices:', highRiskDevices.length);
+        console.log(' High risk devices:', highRiskDevices.length);
         return highRiskDevices.length;
     }, [devices]);
     
@@ -267,9 +267,9 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                                     setSendingAlerts(true);
                                     try {
                                         const result = await EmailAlertService.sendComplianceAlerts(users, devices);
-                                        alert(`✅ Successfully sent ${result.alertsSent} compliance alerts to non-compliant users`);
+                                        alert(`Successfully sent ${result.alertsSent} compliance alerts to non-compliant users`);
                                     } catch (error) {
-                                        alert('❌ Failed to send compliance alerts');
+                                        alert(' Failed to send compliance alerts');
                                     } finally {
                                         setSendingAlerts(false);
                                     }
@@ -278,8 +278,9 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                                 className="p-2 h-full bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-red-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center transition"
                                 title={!isUserAdmin ? "Admin access required" : "Send Email Alerts to Non-Compliant Users"}
                             >
-                                <span className="text-sm">{sendingAlerts ? '⏳' : '📧'}</span>
-                            </button>
+                                <span className="text-sm">{sendingAlerts ? '' : ''}</span>
+                           <MailIcon className="h-6 w-6 text-gray-600" />
+			       	</button>
                             {/* Refresh Data Button - Admin Only */}
                             <button
                                 onClick={fetchData}
@@ -332,9 +333,9 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                         <KpiCard 
     title="Total Devices" 
     value={devices.filter(device => device.machineTags && device.machineTags.length > 0).length} 
-    icon={<ShieldCheckIcon className="h-6 w-6"/>} 
+    icon={<DeviceIcon className="h-6 w-6"/>} 
 />{/* <KpiCard title="Total Devices" value={devices.length} icon={<ShieldCheckIcon className="h-6 w-6"/>} /> */}
-                        <KpiCard title="High Risk Devices" value={devicesAtRisk} icon={<ShieldCheckIcon className="h-6 w-6"/>} />
+                        <KpiCard title="High Risk Devices" value={devicesAtRisk} icon={<RiskDevice className="h-6 w-6"/>} />
                         <KpiCard title="Last Synced" value={lastSynced ? lastSynced.toLocaleTimeString() : 'N/A'} icon={<ClockIcon className="h-6 w-6"/>} />
                     </div>
                     {/* Charts and Analytics Row - 4 columns */}
@@ -352,7 +353,7 @@ const Dashboard: React.FC<DashboardProps> = ({ currentUser, onLogout, onNavigate
                           complianceRate={complianceStats.complianceRate}
                         />
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-    📌 Users are considered non-compliant when their devices have been inactive for more than 14 days.
+    Users are considered non-compliant when their devices have been inactive for more than 14 days.
   </p>
                       </Panel>
                     </div>

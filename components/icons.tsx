@@ -72,3 +72,40 @@ export const ClockIcon: React.FC<IconProps> = ({ className }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
 );
+export const MailIcon: React.FC<IconProps> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  </svg>
+);
+export const DeviceIcon: React.FC<IconProps> = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17.25h4.5M3 5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25v9A2.25 2.25 0 0118.75 16.5H5.25A2.25 2.25 0 013 14.25v-9z" />
+  </svg>
+);
+export const RiskDevice: React.FC<IconProps> = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Device (monitor) */}
+    <rect x="3" y="5" width="18" height="12" rx="2" />
+    <path d="M8 21h8" />
+    <path d="M12 17v4"/>
+    <path d="M14 17v4"/>
+
+
+    {/* Warning badge (triangle in top-right corner) */}
+    <g transform="translate(4 ,3.5) scale(0.5)">
+      <path d="M12 3L20 19H4L12 3z" />
+      <path d="M12 10v4" />
+      <path d="M12 16h.01" />
+    </g>
+  </svg>
+);

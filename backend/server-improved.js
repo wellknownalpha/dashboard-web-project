@@ -8,6 +8,11 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(cors());
+app.use(express.json());
+
+// Email API route
+const emailRoute = require('./api/sendEmail');
+app.use('/api', emailRoute);
 
 const { TENANT_ID, CLIENT_ID, CLIENT_SECRET } = process.env;
 

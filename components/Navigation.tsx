@@ -17,10 +17,10 @@ const Navigation: React.FC<NavigationProps> = ({
     onLogout
 }) => {
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: '■' },
-        { id: 'devices', label: 'Devices', icon: '▲' },
-        { id: 'compliance', label: 'Compliance', icon: '◆' },
-        ...(currentUser.role === UserRole.GlobalAdmin ? [{ id: 'users', label: 'Users', icon: '●' }] : [])
+        { id: 'dashboard', label: 'Dashboard', icon: '' },
+        { id: 'devices', label: 'Devices', icon: '' },
+        { id: 'compliance', label: 'Compliance', icon: '' },
+        ...(currentUser.role === UserRole.GlobalAdmin ? [{ id: 'users', label: 'Users', icon: '' }] : [])
     ];
 
     return (

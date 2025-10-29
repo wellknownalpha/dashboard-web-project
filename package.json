@@ -30,8 +30,9 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "typescript": "~5.8.2",
+    "@types/node": "^22.18.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "vite": "^6.2.0"
   }
 }

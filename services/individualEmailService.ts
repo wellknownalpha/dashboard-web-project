@@ -1,4 +1,5 @@
-import { User, Device } from '../types';
+import { User, Device } from '../types.ts';
+import { sendEmail } from './emailAlertService.ts';  // ✅ Import Gmail sender
 
 /**
  * Individual Email Service for sending alerts to specific users
@@ -10,10 +11,8 @@ export class IndividualEmailService {
      */
     static async sendUserAlert(user: User, devices: Device[], daysSinceLastSeen: number): Promise<boolean> {
         try {
-            const emailContent = {
-                to: user.mail,
-                subject: '🚨 Device Activity Alert - Action Required',
-                body: `
+            const subject = '🚨 Device Activity Alert - Action Required';
+            const body = `
 Dear ${user.displayName},
 
 Our security monitoring has detected that your registered devices have been inactive for ${daysSinceLastSeen} days.
@@ -38,10 +37,11 @@ Contact IT Helpdesk: support@company.com
 
 Best regards,
 SecureOps Security Team
-                `
-            };
+            `;
 
-            // Simulate email sending
+            // ✅ Actually send the email via Gmail
+            await sendEmail(user.mail, subject, body);
+
             console.log('📧 INDIVIDUAL ALERT SENT:', {
                 recipient: user.mail,
                 name: user.displayName,
@@ -52,8 +52,9 @@ SecureOps Security Team
 
             return true;
         } catch (error) {
-            console.error('Failed to send email to', user.displayName, error);
+            console.error('❌ Failed to send email to', user.displayName, error);
             return false;
         }
     }
 }
+
